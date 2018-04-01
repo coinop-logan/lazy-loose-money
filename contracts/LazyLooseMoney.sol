@@ -17,7 +17,7 @@ contract LlmFactory {
         if (currentCommitment[msg.sender] == 0x0) {
             noActiveCommitment = true;
         } else {
-            if  (Commitment(currentCommitment[msg.sender]).getState() == Commitment.State.Closed) {
+            if  (Commitment(currentCommitment[msg.sender]).state() == Commitment.State.Closed) {
                 noActiveCommitment = true;
             }
         }
@@ -73,7 +73,7 @@ contract Commitment {
         Pending,
         Closed
     }
-    State state;
+    State public state;
 
     struct DailyReport {
         bool completed; // guardian report if the commitment for today is completed or not
@@ -126,14 +126,6 @@ contract Commitment {
     event Closed(address indexed commitment, address indexed owner, uint dayscount, uint reportedDays, uint completedDays, uint ownerReward, uint guardianReward, uint closedAt);
 
     /* public functions */
-    function getState()
-    public
-    view
-    returns (State)
-    {
-        return state;
-    }
-
     function getInfo()
     public
     view
